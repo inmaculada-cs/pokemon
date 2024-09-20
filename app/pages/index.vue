@@ -1,5 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+async function useGPT() {
+  const res = await $fetch("", {
+    method: "POST",
+  });
+  return res;
+}
+</script>
 
 <template>
-  <p class="text-3xl font-bold underline">Hello, World!</p>
+  <form action="">
+    <input type="text" />
+    <button>Enviar</button>
+  </form>
 </template>
