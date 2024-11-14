@@ -1,4 +1,4 @@
-# Proyecto
+## Proyecto
 
 ## Páginas
 
