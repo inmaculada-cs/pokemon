@@ -20,32 +20,77 @@ async function onSubmit() {
   imageUrl.value = res.imageUrl;
 }
 
+const pokemonTypes = [
+  {
+    label: "Fire",
+    value: "fire",
+  },
+  {
+    label: "Fighting",
+    value: "fighting",
+  },
+  {
+    label: "Water",
+    value: "water",
+  },
+  {
+    label: "Dragon",
+    value: "dragon",
+  },
+  {
+    label: "Lightning",
+    value: "lightning",
+  },
+  {
+    label: "Grass",
+    value: "grass",
+  },
+  {
+    label: "Fairy",
+    value: "fairy",
+  },
+  {
+    label: "Psychic",
+    value: "psychic",
+  },
+  {
+    label: "Darkness",
+    value: "darkness",
+  },
+  {
+    label: "Metal",
+    value: "metal",
+  },
+  {
+    label: "Colorless",
+    value: "colorless",
+  },
+];
+
 async function copyImgLink() {
   await navigator.clipboard.writeText(imageUrl.value);
 }
 </script>
 
 <template>
-  <div>
+  <div class="mx-auto max-w-5xl">
     <NuxtLink to="/">Home</NuxtLink>
-    <form method="POST" class="space-y-4" @submit.prevent="onSubmit">
-      <div>
+    <form
+      method="POST"
+      class="space-y-4 max-w-md w-full mx-auto"
+      @submit.prevent="onSubmit"
+    >
+      <div class="flex flex-col">
         <label for="">Name</label>
-        <input
-          v-model="name"
-          type="text"
-          class="block border border-gray-300 rounded-md"
-          required
-        />
+        <input v-model="name" type="text" required />
       </div>
-      <div>
+      <div class="flex flex-col">
         <label for="">Type</label>
-        <input
-          v-model="type"
-          type="text"
-          class="block border border-gray-300 rounded-md"
-          required
-        />
+        <select name="type" v-model="type" required>
+          <template v-for="opt in pokemonTypes" :key="opt.value">
+            <option :value="opt.value">{{ opt.label }}</option>
+          </template>
+        </select>
       </div>
       <div class="flex items-center gap-x-4">
         <button

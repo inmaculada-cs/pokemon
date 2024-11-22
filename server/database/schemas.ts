@@ -1,8 +1,16 @@
+import { sql } from "drizzle-orm";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const usersTable = sqliteTable("users", {
-  id: int("id").primaryKey({ autoIncrement: true }),
-  name: text('name'),
-  type: text('type'),
-  imageUrl: text('image_url')
+export const pokemonTable = sqliteTable("pokemon", {
+  id: int("id").primaryKey({ autoIncrement: true }).notNull(),
+
+  name: text("name").notNull(),
+  type: text("type").notNull(),
+  imageUrl: text("image_url").notNull(),
+
+  likes: int("likes").notNull().default(0),
+
+  timestamp: int("timestamp", { mode: "timestamp_ms" }).default(
+    sql`(unixepoch())`
+  ),
 });
