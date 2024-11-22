@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
     const pokemon = await openai.images.generate({
       model: "dall-e-3",
-      prompt: `Generate a pokemon card, like a tcg card, for a pokemon called ${name} of type ${type} with no background.`,
+      prompt: `Generate a pokemon card, like a tcg card, for a pokemon called ${name} of pokemon tcg card type ${type} with no background and no extra card aside from the front of the card.`,
     });
 
     const imageUrl =
