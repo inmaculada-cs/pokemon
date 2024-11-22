@@ -1,4 +1,6 @@
 import { OpenAI } from "openai";
+import { db } from "~~/server/database/client";
+import { pokemonTable } from "../database/schemas";
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
@@ -9,23 +11,36 @@ export default defineEventHandler(async (event) => {
       apiKey: config.openaiApiKey,
     });
 
-    const pokemon = await openai.images.generate({
+    const imageData = await openai.images.generate({
       model: "dall-e-3",
-      prompt: `Generate a pokemon card, like a tcg card, for a pokemon called ${name} of pokemon tcg card type ${type} with no background and no extra card aside from the front of the card.`,
+      prompt: `Generate a tcg card, similar to a pokemon tcg card, 
+        for a pocket monster called ${name} of type ${type} (based on pokemon tcg types). 
+        The image must contain the card and only the front side of the card, 
+        with no additional details. Again, the resulting image must contain ONLY the front side of the card and nothing else. 
+        Show the name of the monster on top (the name must be the exact name received), then its art, and then its data. 
+        For the data, generate random stats and moves based on those used in pokemon tcg cards. Don't show any hands in the image, no external objects, no background, only the card.`,
     });
 
     const imageUrl =
-      pokemon.data[0].url ??
+      imageData.data[0].url ??
       "https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SM9/SM9_EN_14.png";
 
+    const [pokemon] = await db
+      .insert(pokemonTable)
+      .values({
+        name: name,
+        type: type,
+        imageUrl: imageUrl,
+      })
+      .returning();
+
     return {
-      imageUrl: imageUrl,
+      pokemon,
     };
   } catch (error) {
     console.error(error);
     return {
-      imageUrl:
-        "https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SM9/SM9_EN_14.png",
+      pokemon: null,
     };
   }
 });

@@ -2,6 +2,7 @@
 const name = ref("");
 const type = ref("");
 const loading = ref(false);
+const message = ref("");
 
 const imageUrl = ref<string>(
   "https://www.pokemon.com/static-assets/content-assets/cms2/img/cards/web/XY1/XY1_EN_42.png"
@@ -17,54 +18,25 @@ async function onSubmit() {
     },
   });
   loading.value = false;
-  imageUrl.value = res.imageUrl;
+  if (res.pokemon) {
+    imageUrl.value = res.pokemon.imageUrl;
+  } else {
+    message.value = "An error ocurred";
+  }
 }
 
 const pokemonTypes = [
-  {
-    label: "Fire",
-    value: "fire",
-  },
-  {
-    label: "Fighting",
-    value: "fighting",
-  },
-  {
-    label: "Water",
-    value: "water",
-  },
-  {
-    label: "Dragon",
-    value: "dragon",
-  },
-  {
-    label: "Lightning",
-    value: "lightning",
-  },
-  {
-    label: "Grass",
-    value: "grass",
-  },
-  {
-    label: "Fairy",
-    value: "fairy",
-  },
-  {
-    label: "Psychic",
-    value: "psychic",
-  },
-  {
-    label: "Darkness",
-    value: "darkness",
-  },
-  {
-    label: "Metal",
-    value: "metal",
-  },
-  {
-    label: "Colorless",
-    value: "colorless",
-  },
+  "Fire",
+  "Fighting",
+  "Water",
+  "Dragon",
+  "Lightning",
+  "Grass",
+  "Fairy",
+  "Psychic",
+  "Darkness",
+  "Metal",
+  "Colorless",
 ];
 
 async function copyImgLink() {
@@ -88,7 +60,7 @@ async function copyImgLink() {
         <label for="">Type</label>
         <select name="type" v-model="type" required>
           <template v-for="opt in pokemonTypes" :key="opt.value">
-            <option :value="opt.value">{{ opt.label }}</option>
+            <option :value="opt">{{ opt }}</option>
           </template>
         </select>
       </div>
